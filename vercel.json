@@ -1,12 +1,9 @@
 {
   "version": 2,
   "buildCommand": "npm run build",
-  "outputDirectory": ".next",
+  "outputDirectory": "dist",
   "framework": "nextjs",
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
-  ],
-  "env": {
-    "NEXT_PUBLIC_APP_URL": "@second-brain-url"
-  }
+  ]
 }
