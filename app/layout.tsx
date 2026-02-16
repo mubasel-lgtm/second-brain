@@ -1,7 +1,4 @@
-import type { Metadata } from 'next'
-import './globals.css'
-
-export const metadata: Metadata = {
+export const metadata = {
   title: 'Second Brain',
   description: 'Your personal mission control',
 }
