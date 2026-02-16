@@ -1,66 +1,98 @@
-import { Brain, FileText, CheckCircle, Clock, TrendingUp, Lightbulb, Plus, ArrowRight, Zap, Mail, Bell, Calendar } from 'lucide-react'
+'use client'
+
+import { useState, useEffect } from 'react'
+import { 
+  Brain, 
+  CheckCircle2, 
+  FileText, 
+  Clock, 
+  TrendingUp, 
+  Plus,
+  ArrowUpRight,
+  Mail,
+  Bell,
+  Calendar,
+  Zap,
+  Search,
+  MoreHorizontal,
+  ChevronRight
+} from 'lucide-react'
 
 export default function Dashboard() {
-  const currentTime = new Date().toLocaleTimeString('en-US', { 
-    hour: '2-digit', 
-    minute: '2-digit',
-    hour12: false 
-  })
-  
-  const currentDate = new Date().toLocaleDateString('en-US', { 
-    weekday: 'long', 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
-  })
+  const [currentTime, setCurrentTime] = useState('')
+  const [currentDate, setCurrentDate] = useState('')
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    const updateTime = () => {
+      const now = new Date()
+      setCurrentTime(now.toLocaleTimeString('en-US', { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        hour12: false 
+      }))
+      setCurrentDate(now.toLocaleDateString('en-US', { 
+        weekday: 'long', 
+        month: 'short', 
+        day: 'numeric'
+      }))
+    }
+    updateTime()
+    const interval = setInterval(updateTime, 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  if (!mounted) return null
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      {/* Top Navigation Bar */}
-      <nav className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-[#0a0a0a] text-[#fafafa] font-sans antialiased">
+      {/* Top Navigation */}
+      <header className="border-b border-[#1a1a1a] bg-[#0a0a0a]/80 backdrop-blur-md sticky top-0 z-50">
+        <div className="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-8">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-violet-500 to-fuchsia-500 rounded-xl flex items-center justify-center shadow-lg shadow-violet-500/20">
-                <Brain className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 bg-[#fafafa] rounded-lg flex items-center justify-center">
+                <Brain className="w-5 h-5 text-[#0a0a0a]" />
               </div>
-              <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-                  Second Brain
-                </h1>
-                <p className="text-xs text-slate-500">Mission Control</p>
-              </div>
+              <span className="font-semibold text-[15px] tracking-tight">Second Brain</span>
             </div>
-            <div className="flex items-center gap-4">
-              <button className="p-2 hover:bg-slate-800 rounded-lg transition-colors relative">
-                <Bell className="w-5 h-5 text-slate-400" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full"></span>
-              </button>
-              <button className="p-2 hover:bg-slate-800 rounded-lg transition-colors">
-                <Mail className="w-5 h-5 text-slate-400" />
-              </button>
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-sm font-bold">
-                MM
-              </div>
+            <nav className="hidden md:flex items-center gap-1">
+              <NavLink href="/" active>Dashboard</NavLink>
+              <NavLink href="/memory">Memories</NavLink>
+              <NavLink href="/tasks">Tasks</NavLink>
+              <NavLink href="/documents">Documents</NavLink>
+            </nav>
+          </div>
+          <div className="flex items-center gap-3">
+            <button className="p-2 hover:bg-[#1a1a1a] rounded-lg transition-colors">
+              <Search className="w-4 h-4 text-[#666]" />
+            </button>
+            <button className="p-2 hover:bg-[#1a1a1a] rounded-lg transition-colors relative">
+              <Bell className="w-4 h-4 text-[#666]" />
+              <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-[#ef4444] rounded-full" />
+            </button>
+            <div className="w-8 h-8 bg-gradient-to-br from-[#333] to-[#1a1a1a] rounded-full border border-[#333] flex items-center justify-center text-xs font-medium">
+              MM
             </div>
           </div>
         </div>
-      </nav>
+      </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
+      <main className="max-w-[1400px] mx-auto px-6 py-8">
+        {/* Header Section */}
+        <div className="mb-10">
           <div className="flex items-end justify-between">
             <div>
-              <p className="text-slate-400 text-sm mb-1">{currentDate}</p>
-              <h2 className="text-4xl font-bold text-white">
-                Good Evening, <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">Mubasel</span>
-              </h2>
-              <p className="text-slate-500 mt-2">Your personal command center — everything in one place.</p>
+              <p className="text-[#666] text-sm mb-1">{currentDate}</p>
+              <h1 className="text-[32px] font-semibold tracking-tight">
+                Good evening, Mubasel
+              </h1>
+              <p className="text-[#666] mt-1">Here&apos;s what&apos;s happening today</p>
             </div>
             <div className="text-right">
-              <p className="text-3xl font-light text-slate-300">{currentTime}</p>
-              <p className="text-sm text-slate-600">Dubai, UAE</p>
+              <p className="text-[42px] font-light tracking-tight tabular-nums leading-none">{currentTime}</p>
+              <p className="text-sm text-[#666] mt-1">Dubai, UAE</p>
             </div>
           </div>
         </div>
@@ -68,204 +100,188 @@ export default function Dashboard() {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <StatCard 
-            icon={<Brain className="w-5 h-5" />}
-            title="Memories"
+            icon={Brain}
+            label="Memories"
             value="127"
             change="+5"
-            color="violet"
+            trend="up"
           />
           <StatCard 
-            icon={<CheckCircle className="w-5 h-5" />}
-            title="Tasks"
+            icon={CheckCircle2}
+            label="Tasks"
             value="8"
-            subtitle="3 high priority"
-            color="emerald"
+            sublabel="3 high priority"
           />
           <StatCard 
-            icon={<FileText className="w-5 h-5" />}
-            title="Documents"
+            icon={FileText}
+            label="Documents"
             value="32"
             change="+2"
-            color="blue"
+            trend="up"
           />
           <StatCard 
-            icon={<Zap className="w-5 h-5" />}
-            title="Active Projects"
+            icon={Zap}
+            label="Active Projects"
             value="5"
-            subtitle="2 urgent"
-            color="amber"
+            sublabel="2 urgent"
           />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main Content - 2 columns */}
+          {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Morning Brief Card */}
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-600/20 via-fuchsia-600/20 to-slate-900 border border-violet-500/20 p-6">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-violet-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-              <div className="relative">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-violet-500/20 rounded-lg">
-                      <TrendingUp className="w-5 h-5 text-violet-400" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-white">Morning Brief</h3>
-                      <p className="text-sm text-slate-400">Delivered daily at 8:00 AM</p>
-                    </div>
-                  </div>
-                  <button className="flex items-center gap-2 px-4 py-2 bg-violet-600 hover:bg-violet-500 text-white rounded-lg text-sm font-medium transition-colors">
-                    View Full
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <BriefItem 
-                    icon="📰"
-                    label="Dubai AI News"
-                    value="3 new stories"
-                  />
-                  <BriefItem 
-                    icon="💡"
-                    label="Business Ideas"
-                    value="2 opportunities"
-                  />
-                  <BriefItem 
-                    icon="✅"
-                    label="Today's Tasks"
-                    value="5 high priority"
-                  />
-                  <BriefItem 
-                    icon="🤝"
-                    label="Agent Actions"
-                    value="2 completed"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Notary Command Center */}
-            <div className="rounded-2xl bg-slate-900/50 border border-slate-800 p-6">
-              <div className="flex items-center justify-between mb-6">
+            {/* Morning Brief */}
+            <section className="bg-[#111] border border-[#1a1a1a] rounded-xl overflow-hidden">
+              <div className="px-6 py-4 border-b border-[#1a1a1a] flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-amber-500/20 rounded-lg">
-                    <Clock className="w-5 h-5 text-amber-400" />
+                  <div className="w-8 h-8 bg-[#1a1a1a] rounded-lg flex items-center justify-center">
+                    <TrendingUp className="w-4 h-4 text-[#fafafa]" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-white">Notary Command</h3>
-                    <p className="text-sm text-slate-400">GmbH transfer from Dubai</p>
+                    <h2 className="font-semibold text-[15px]">Morning Brief</h2>
+                    <p className="text-xs text-[#666]">Daily at 8:00 AM</p>
                   </div>
                 </div>
-                <span className="px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full text-xs font-medium">
+                <button className="flex items-center gap-1.5 text-sm text-[#666] hover:text-[#fafafa] transition-colors">
+                  View all
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+              <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <BriefItem 
+                  emoji="📰"
+                  title="Dubai AI News"
+                  description="3 new stories relevant to your interests"
+                />
+                <BriefItem 
+                  emoji="💡"
+                  title="Business Ideas"
+                  description="2 opportunities identified today"
+                />
+                <BriefItem 
+                  emoji="✅"
+                  title="Today's Tasks"
+                  description="5 high priority items to complete"
+                />
+                <BriefItem 
+                  emoji="🤝"
+                  title="Agent Actions"
+                  description="2 automated tasks completed"
+                />
+              </div>
+            </section>
+
+            {/* Notary Command */}
+            <section className="bg-[#111] border border-[#1a1a1a] rounded-xl overflow-hidden">
+              <div className="px-6 py-4 border-b border-[#1a1a1a] flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-[#1a1a1a] rounded-lg flex items-center justify-center">
+                    <Clock className="w-4 h-4 text-[#fafafa]" />
+                  </div>
+                  <div>
+                    <h2 className="font-semibold text-[15px]">Notary Command</h2>
+                    <p className="text-xs text-[#666]">GmbH transfer from Dubai</p>
+                  </div>
+                </div>
+                <span className="px-2.5 py-1 bg-[#1a1a1a] text-xs rounded-full border border-[#333]">
                   17 contacts
                 </span>
               </div>
-              
-              <div className="flex gap-3">
-                <StatusBadge status="waiting" label="Awaiting replies" count={14} />
-                <StatusBadge status="success" label="Responded" count={2} />
-                <StatusBadge status="urgent" label="Follow-up needed" count={1} />
+              <div className="p-6">
+                <div className="flex gap-3">
+                  <StatusPill count={14} label="Awaiting replies" variant="neutral" />
+                  <StatusPill count={2} label="Responded" variant="success" />
+                  <StatusPill count={1} label="Follow-up" variant="warning" />
+                </div>
               </div>
-            </div>
+            </section>
 
             {/* Recent Activity */}
-            <div className="rounded-2xl bg-slate-900/50 border border-slate-800 p-6">
-              <h3 className="text-lg font-semibold text-white mb-4">Recent Activity</h3>
-              <div className="space-y-3">
+            <section className="bg-[#111] border border-[#1a1a1a] rounded-xl overflow-hidden">
+              <div className="px-6 py-4 border-b border-[#1a1a1a]">
+                <h2 className="font-semibold text-[15px]">Recent Activity</h2>
+              </div>
+              <div className="divide-y divide-[#1a1a1a]">
                 <ActivityRow 
                   time="2h ago"
-                  icon={<Brain className="w-4 h-4" />}
                   title="Memory added"
                   description="Notary research results — 17 contacts"
-                  color="violet"
                 />
                 <ActivityRow 
                   time="4h ago"
-                  icon={<CheckCircle className="w-4 h-4" />}
                   title="Task completed"
                   description="Extracted 27 video hooks from content"
-                  color="emerald"
                 />
                 <ActivityRow 
                   time="Yesterday"
-                  icon={<Mail className="w-4 h-4" />}
-                  title="AgentMail active"
+                  title="AgentMail activated"
                   description="widecenter550@agentmail.to ready"
-                  color="blue"
                 />
               </div>
-            </div>
+            </section>
           </div>
 
-          {/* Sidebar - 1 column */}
+          {/* Sidebar */}
           <div className="space-y-6">
             {/* Quick Actions */}
-            <div className="rounded-2xl bg-slate-900/50 border border-slate-800 p-6">
-              <h3 className="text-lg font-semibold text-white mb-4">Quick Actions</h3>
-              <div className="space-y-2">
-                <ActionButton 
-                  icon={<Plus className="w-4 h-4" />}
-                  label="Add Memory"
-                  color="violet"
-                />
-                <ActionButton 
-                  icon={<CheckCircle className="w-4 h-4" />}
-                  label="Create Task"
-                  color="emerald"
-                />
-                <ActionButton 
-                  icon={<FileText className="w-4 h-4" />}
-                  label="Upload Document"
-                  color="blue"
-                />
-                <ActionButton 
-                  icon={<Mail className="w-4 h-4" />}
-                  label="Check AgentMail"
-                  color="amber"
-                />
+            <section className="bg-[#111] border border-[#1a1a1a] rounded-xl overflow-hidden">
+              <div className="px-6 py-4 border-b border-[#1a1a1a]">
+                <h2 className="font-semibold text-[15px]">Quick Actions</h2>
               </div>
-            </div>
+              <div className="p-2">
+                <ActionButton icon={Plus} label="Add Memory" />
+                <ActionButton icon={CheckCircle2} label="Create Task" />
+                <ActionButton icon={FileText} label="Upload Document" />
+                <ActionButton icon={Mail} label="Check AgentMail" />
+              </div>
+            </section>
 
             {/* Agent Status */}
-            <div className="rounded-2xl bg-slate-900/50 border border-slate-800 p-6">
-              <h3 className="text-lg font-semibold text-white mb-4">Marvin Status</h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-400">Status</span>
-                  <span className="flex items-center gap-2 text-sm text-emerald-400">
-                    <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-                    Online
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-400">Active Jobs</span>
-                  <span className="text-sm text-slate-200">2 running</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-400">Email</span>
-                  <span className="text-xs text-slate-500 font-mono">widecenter550...</span>
-                </div>
-                <div className="pt-3 border-t border-slate-800">
-                  <p className="text-xs text-slate-500">Last action: 2m ago</p>
-                </div>
+            <section className="bg-[#111] border border-[#1a1a1a] rounded-xl overflow-hidden">
+              <div className="px-6 py-4 border-b border-[#1a1a1a]">
+                <h2 className="font-semibold text-[15px]">Marvin Status</h2>
               </div>
-            </div>
-
-            {/* Cron Jobs */}
-            <div className="rounded-2xl bg-slate-900/50 border border-slate-800 p-6">
-              <h3 className="text-lg font-semibold text-white mb-4">Automations</h3>
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <Calendar className="w-4 h-4 text-violet-400" />
-                  <div className="flex-1">
-                    <p className="text-sm text-slate-200">Morning Brief</p>
-                    <p className="text-xs text-slate-500">Daily 8:00 AM</p>
+              <div className="p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-[#666]">Status</span>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-[#22c55e] rounded-full animate-pulse" />
+                    <span className="text-sm">Online</span>
                   </div>
-                  <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-[#666]">Active Jobs</span>
+                  <span className="text-sm">2 running</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-[#666]">Email</span>
+                  <span className="text-xs text-[#666] font-mono">widecenter550...</span>
+                </div>
+                <div className="pt-4 border-t border-[#1a1a1a]">
+                  <p className="text-xs text-[#666]">Last action: 2m ago</p>
                 </div>
               </div>
-            </div>
+            </section>
+
+            {/* Automations */}
+            <section className="bg-[#111] border border-[#1a1a1a] rounded-xl overflow-hidden">
+              <div className="px-6 py-4 border-b border-[#1a1a1a] flex items-center justify-between">
+                <h2 className="font-semibold text-[15px]">Automations</h2>
+                <button className="p-1 hover:bg-[#1a1a1a] rounded transition-colors">
+                  <MoreHorizontal className="w-4 h-4 text-[#666]" />
+                </button>
+              </div>
+              <div className="p-4">
+                <div className="flex items-center gap-3 p-3 hover:bg-[#1a1a1a] rounded-lg transition-colors cursor-pointer">
+                  <Calendar className="w-4 h-4 text-[#666]" />
+                  <div className="flex-1">
+                    <p className="text-sm">Morning Brief</p>
+                    <p className="text-xs text-[#666]">Daily 8:00 AM</p>
+                  </div>
+                  <span className="w-2 h-2 bg-[#22c55e] rounded-full" />
+                </div>
+              </div>
+            </section>
           </div>
         </div>
       </main>
@@ -273,113 +289,97 @@ export default function Dashboard() {
   )
 }
 
-function StatCard({ icon, title, value, change, subtitle, color }: {
-  icon: React.ReactNode
-  title: string
+function NavLink({ href, children, active }: { href: string; children: React.ReactNode; active?: boolean }) {
+  return (
+    <a 
+      href={href}
+      className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
+        active 
+          ? 'bg-[#1a1a1a] text-[#fafafa]' 
+          : 'text-[#666] hover:text-[#fafafa] hover:bg-[#1a1a1a]'
+      }`}
+    >
+      {children}
+    </a>
+  )
+}
+
+function StatCard({ icon: Icon, label, value, change, sublabel, trend }: {
+  icon: React.ElementType
+  label: string
   value: string
   change?: string
-  subtitle?: string
-  color: string
+  sublabel?: string
+  trend?: 'up' | 'down'
 }) {
-  const colors: Record<string, string> = {
-    violet: 'from-violet-500/20 to-violet-600/20 border-violet-500/30 text-violet-400',
-    emerald: 'from-emerald-500/20 to-emerald-600/20 border-emerald-500/30 text-emerald-400',
-    blue: 'from-blue-500/20 to-blue-600/20 border-blue-500/30 text-blue-400',
-    amber: 'from-amber-500/20 to-amber-600/20 border-amber-500/30 text-amber-400',
-  }
-
   return (
-    <div className={`relative overflow-hidden rounded-xl bg-gradient-to-br ${colors[color]} border p-5`}>
-      <div className="flex items-start justify-between">
-        <div className={`p-2 rounded-lg bg-${color}-500/20`}>
-          {icon}
+    <div className="bg-[#111] border border-[#1a1a1a] rounded-xl p-5 hover:border-[#333] transition-colors">
+      <div className="flex items-start justify-between mb-3">
+        <div className="w-8 h-8 bg-[#1a1a1a] rounded-lg flex items-center justify-center">
+          <Icon className="w-4 h-4 text-[#fafafa]" />
         </div>
         {change && (
-          <span className="text-xs font-medium text-slate-400">{change}</span>
+          <div className={`flex items-center gap-1 text-xs ${trend === 'up' ? 'text-[#22c55e]' : 'text-[#ef4444]'}`}>
+            <ArrowUpRight className={`w-3 h-3 ${trend === 'down' && 'rotate-90'}`} />
+            {change}
+          </div>
         )}
       </div>
-      <div className="mt-4">
-        <p className="text-2xl font-bold text-white">{value}</p>
-        <p className="text-sm text-slate-400">{title}</p>
-        {subtitle && (
-          <p className="text-xs text-slate-500 mt-1">{subtitle}</p>
-        )}
-      </div>
-    </div>
-  )
-}
-
-function BriefItem({ icon, label, value }: { icon: string, label: string, value: string }) {
-  return (
-    <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-950/50 border border-slate-800/50">
-      <span className="text-xl">{icon}</span>
       <div>
-        <p className="text-sm font-medium text-slate-300">{label}</p>
-        <p className="text-xs text-slate-500">{value}</p>
+        <p className="text-2xl font-semibold tracking-tight">{value}</p>
+        <p className="text-sm text-[#666] mt-0.5">{label}</p>
+        {sublabel && <p className="text-xs text-[#666] mt-1">{sublabel}</p>}
       </div>
     </div>
   )
 }
 
-function StatusBadge({ status, label, count }: { status: string, label: string, count: number }) {
-  const colors: Record<string, string> = {
-    waiting: 'bg-slate-700 text-slate-300',
-    success: 'bg-emerald-500/20 text-emerald-400',
-    urgent: 'bg-rose-500/20 text-rose-400',
+function BriefItem({ emoji, title, description }: { emoji: string; title: string; description: string }) {
+  return (
+    <div className="flex items-start gap-3 p-3 hover:bg-[#1a1a1a] rounded-lg transition-colors cursor-pointer group">
+      <span className="text-xl">{emoji}</span>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-[#fafafa] group-hover:text-white">{title}</p>
+        <p className="text-xs text-[#666] mt-0.5">{description}</p>
+      </div>
+    </div>
+  )
+}
+
+function StatusPill({ count, label, variant }: { count: number; label: string; variant: 'neutral' | 'success' | 'warning' }) {
+  const variants = {
+    neutral: 'bg-[#1a1a1a] text-[#666]',
+    success: 'bg-[#22c55e]/10 text-[#22c55e] border-[#22c55e]/20',
+    warning: 'bg-[#f59e0b]/10 text-[#f59e0b] border-[#f59e0b]/20'
   }
 
   return (
-    <div className={`px-4 py-2 rounded-lg ${colors[status]} text-sm font-medium`}>
+    <div className={`px-4 py-2 rounded-lg text-sm font-medium border ${variants[variant]}`}>
       {count} {label}
     </div>
   )
 }
 
-function ActivityRow({ time, icon, title, description, color }: {
-  time: string
-  icon: React.ReactNode
-  title: string
-  description: string
-  color: string
-}) {
-  const colors: Record<string, string> = {
-    violet: 'bg-violet-500/20 text-violet-400',
-    emerald: 'bg-emerald-500/20 text-emerald-400',
-    blue: 'bg-blue-500/20 text-blue-400',
-  }
-
+function ActivityRow({ time, title, description }: { time: string; title: string; description: string }) {
   return (
-    <div className="flex items-start gap-3">
-      <div className={`p-2 rounded-lg ${colors[color]}`}>
-        {icon}
-      </div>
+    <div className="px-6 py-4 flex items-start gap-4 hover:bg-[#1a1a1a]/50 transition-colors">
+      <div className="w-2 h-2 bg-[#333] rounded-full mt-2" />
       <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-slate-200">{title}</p>
-          <span className="text-xs text-slate-600">{time}</span>
+        <div className="flex items-center justify-between mb-1">
+          <p className="text-sm font-medium">{title}</p>
+          <span className="text-xs text-[#666]">{time}</span>
         </div>
-        <p className="text-sm text-slate-500 truncate">{description}</p>
+        <p className="text-sm text-[#666] truncate">{description}</p>
       </div>
     </div>
   )
 }
 
-function ActionButton({ icon, label, color }: {
-  icon: React.ReactNode
-  label: string
-  color: string
-}) {
-  const colors: Record<string, string> = {
-    violet: 'hover:bg-violet-500/20 hover:border-violet-500/50',
-    emerald: 'hover:bg-emerald-500/20 hover:border-emerald-500/50',
-    blue: 'hover:bg-blue-500/20 hover:border-blue-500/50',
-    amber: 'hover:bg-amber-500/20 hover:border-amber-500/50',
-  }
-
+function ActionButton({ icon: Icon, label }: { icon: React.ElementType; label: string }) {
   return (
-    <button className={`w-full flex items-center gap-3 p-3 rounded-lg border border-slate-800 bg-slate-900/50 text-left transition-all ${colors[color]} group`}>
-      <span className="text-slate-400 group-hover:text-white transition-colors">{icon}</span>
-      <span className="text-sm text-slate-300 group-hover:text-white transition-colors">{label}</span>
+    <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-sm hover:bg-[#1a1a1a] transition-colors group">
+      <Icon className="w-4 h-4 text-[#666] group-hover:text-[#fafafa] transition-colors" />
+      <span className="text-[#666] group-hover:text-[#fafafa] transition-colors">{label}</span>
     </button>
   )
 }
